@@ -1,0 +1,321 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "helloworld.py",
+			"settings":
+			{
+				"buffer_size": 276,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app.yaml",
+			"settings":
+			{
+				"buffer_size": 131,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 138.0,
+		"selected_items":
+		[
+			[
+				"project",
+				"Project: Save As"
+			],
+			[
+				"pro",
+				"Project: Add Folder"
+			],
+			[
+				"project edi",
+				"Project: Edit"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"bro",
+				"Preferences: Browse Packages"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: Disable Package"
+			],
+			[
+				"linter",
+				"SublimeLinter: Show Error List"
+			],
+			[
+				"lint",
+				"SublimeLinter: Background Linting"
+			],
+			[
+				"python",
+				"Set Syntax: Python"
+			],
+			[
+				"syn text",
+				"Set Syntax: Plain Text"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"pyth",
+				"Set Syntax: Python"
+			],
+			[
+				"sta",
+				"View: Toggle Status Bar"
+			],
+			[
+				"stat",
+				"View: Toggle Status Bar"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"toggle",
+				"Toggle Block Comment"
+			],
+			[
+				"pyto",
+				"Set Syntax: Python"
+			],
+			[
+				"side",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"makef",
+				"Set Syntax: Makefile"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 315.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/media/DATA/Khurewat/Project Awaken/Awaken D-final notes.txt",
+		"/home/khurewat/Documents/Project_Finternale/helloworld.py",
+		"/media/DATA/Khurewat/toDay08.txt",
+		"/media/DATA/Khurewat/Project Awaken/Version_Original/Day10 CORE.txt",
+		"/media/DATA/Khurewat/Active_Cases/Dropbox/count.txt",
+		"/media/DATA/Khurewat/Active_Cases/Dropbox/count",
+		"/home/khurewat/Desktop/untitled.py",
+		"/home/khurewat/test.txt",
+		"/media/DATA/Khurewat/Active_Cases/Dropbox/N120815.txt",
+		"/home/khurewat/.config/sublime-text-2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
+		"/home/khurewat/.config/sublime-text-2/Packages/AdvancedNewFile/README.md",
+		"/home/khurewat/.config/sublime-text-2/Packages/DocBlockr/README.md",
+		"/home/khurewat/Desktop/slides_TO_BE_FIXED",
+		"/home/khurewat/.gvfs/SFTP for khurewat on lphelc1a.epfl.ch/share/lphelc1-srv/srv/home/khurewat/MasterProject/root_analysis/analyse_batch07.py",
+		"/home/khurewat/Dropbox/Workspace/LaTeX_Reports/02_2013_MasterProjectDefense/main_report.tex",
+		"/home/khurewat/Dropbox/Workspace/LaTeX_Reports/general_header_beamer.tex",
+		"/home/khurewat/Dropbox/TOP_MEAW/REPORT/THESIS/main_report.tex",
+		"/home/khurewat/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/khurewat/.gvfs/SFTP for khurewat on lphelc1a.epfl.ch/home/khurewat/MasterProject/root_analysis/derive_batch08_fullsim_rev02.py",
+		"/home/khurewat/.gvfs/SFTP for khurewat on lphelc1a.epfl.ch/home/khurewat/MasterProject/root_analysis/derive_batch08_fullsim_rev01.py"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Blah",
+			"Helloworld",
+			"world",
+			"555",
+			"$a$",
+			"hline",
+			"loop_bestbox_result_batch07_rev04_sqrt",
+			":\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "helloworld.py",
+					"settings":
+					{
+						"buffer_size": 276,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								276,
+								276
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app.yaml",
+					"settings":
+					{
+						"buffer_size": 131,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								131,
+								131
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 138.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"jet",
+				"/home/khurewat/Dropbox/Workspace/LaTeX_Reports/02_2013_MasterProjectDefense/main_report.tex"
+			],
+			[
+				"main",
+				"/home/khurewat/Dropbox/Workspace/LaTeX_Reports/02_2013_MasterProjectDefense/main_report.tex"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
