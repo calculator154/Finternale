@@ -5,24 +5,15 @@ import itertools,logging
 from google.appengine.ext import db
 from google.appengine.api import users
 
-
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
-class Greeting(db.Model):
-  """Models an individual Guestbook entry with an author, content, and date."""
-  author = db.StringProperty()
-  content = db.StringProperty(multiline=True)
-  date = db.DateTimeProperty(auto_now_add=True)
-
-
-def guestbook_key(guestbook_name=None):
-  """Constructs a Datastore key for a Guestbook entity with guestbook_name."""
-  return db.Key.from_path('Guestbook', guestbook_name or 'default_guestbook')
 
 class Track(db.Model):
-   artist   = db.StringProperty()
-   title    = db.StringProperty()
+   title    = db.StringProperty(required=True)
+   artist   = db.StringProperty(required=True)
+   album    = db.StringProperty()
+   year     = db.IntegerProperty()
    revisions= db.ListProperty(db.Key)
 
 class Revision(db.Model):
@@ -41,11 +32,6 @@ def searchTrack(search_query):
 
 class MainPage(webapp2.RequestHandler):
    def get(self):
-      guestbook_name=self.request.get('guestbook_name')
-      greetings_query = Greeting.all().ancestor(
-         guestbook_key(guestbook_name)).order('-date')
-      greetings = greetings_query.fetch(10)
-
       search_query = self.request.get('search_query')
       search_result = searchTrack(search_query)
 
@@ -58,10 +44,8 @@ class MainPage(webapp2.RequestHandler):
 
       template_values = {
          'search_result': search_result,
-         'greetings': greetings,
          'url': url,
          'url_linktext': url_linktext,
-         'guestbook_name': cgi.escape(guestbook_name),
       }
 
       template = jinja_environment.get_template('index.html')
@@ -75,7 +59,6 @@ class TrackPage(webapp2.RequestHandler):
       track_key = db.Key(self.request.get('key'))
       track = Track.all().filter('__key__ = ', track_key).get()
 
-      #rev_keys = [db.Key(k) for k in track.revisions]
       list_revision = list(Revision.all().filter('__key__ IN', track.revisions).run(limit=10))
 
       for rev in list_revision:
@@ -106,6 +89,7 @@ class Guestbook(webapp2.RequestHandler):
       new_artist = None
       new_title = None
 
+      # Support Thai
       iterable = iter(l)
       for line in iterable:
          if line.startswith('artist'):
@@ -137,22 +121,8 @@ class Guestbook(webapp2.RequestHandler):
       track.revisions.append(revision.key())
       track.put()
 
-
       self.redirect('/')
 
-    # We set the same parent key on the 'Greeting' to ensure each greeting is in
-    # the same entity group. Queries across the single entity group will be
-    # consistent. However, the write rate to a single entity group should
-    # be limited to ~1/second.
-    # guestbook_name = self.request.get('guestbook_name')
-    # greeting = Greeting(parent=guestbook_key(guestbook_name))
-
-    # if users.get_current_user():
-    #   greeting.author = users.get_current_user().nickname()
-
-    # greeting.content = self.request.get('content')
-    # greeting.put()
-      # self.redirect('/?' + urllib.urlencode({'guestbook_name': guestbook_name}))
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
