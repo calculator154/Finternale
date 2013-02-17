@@ -16,8 +16,14 @@ class Track(db.Model):
    year     = db.IntegerProperty()
    revisions= db.ListProperty(db.Key)
 
+   # def __repr__(self):
+   def addRevision(self,rev):
+      self.revisions.append(rev.key())
+
+
+
 class Revision(db.Model):
-   content  = db.TextProperty()
+   content  = db.TextProperty(required=True)
    date     = db.DateTimeProperty(auto_now_add=True)
 
 def searchTrack(search_query):
@@ -27,6 +33,48 @@ def searchTrack(search_query):
    if len(search_result)==0:
       search_result = None
    return search_result
+
+def TRparser(content):
+   """ Parse the raw content in text file into (track,revision) pair """
+   lines = iter(content.splitlines(True))
+   
+   new_title   = None
+   new_artist  = None
+   new_album   = None
+
+   # TODO: Support Thai
+   for line in lines:
+      if line.startswith('title'):
+         new_title = line.split()[1]
+      elif line.startswith('artist'):
+         new_artist = line.split()[1]
+      elif line.startswith('album'):
+         new_album = line.split()[1]
+      else:
+         break
+   
+   # assert: must have title/artist/rev
+
+   revision_content = "".join(list(lines))
+
+   revision = Revision(content=revision_content)
+   track = Track(title=new_title, artist=new_artist)
+
+   return (track,revision)
+
+
+def fetchTrack(track):
+   """ For a track that existed already, fetch it up."""
+   ts = Track.all()
+   ts.filter('title = ', track.title)
+   ts.filter('artist =', track.artist)
+   return ts.get()
+
+
+def isTrackExisted(track):
+   """ Boolean: return true if given track already existed """
+   return fetchTrack(track) is not None
+
 
 #=====================================================================================
 
@@ -84,8 +132,6 @@ class Guestbook(webapp2.RequestHandler):
       
       l = val.splitlines(True)
 
-      list_header = ('artist', 'title')
-
       new_artist = None
       new_title = None
 
@@ -123,9 +169,45 @@ class Guestbook(webapp2.RequestHandler):
 
       self.redirect('/')
 
+class Upload(webapp2.RequestHandler):
+   def post(self):
+      file = unicode(self.request.get('file'),'utf-8')
+
+      # file = self.request.get('file')
+      # file = self.request.POST.get("file",None)
+      # logging.info(file.value)
+      # logging.info(file.value)
+      # logging.info(file)
+
+      t,r = TRparser(file)
+      r.put()
+
+      logging.info(isTrackExisted(t))
+
+
+      if isTrackExisted(t):
+         track = fetchTrack(t)
+         track.addRevision(r)
+         track.put()
+      else:
+         t.addRevision(r)
+         t.put()
+
+      self.redirect('/')
+
+      # logging.info(t)
+      # logging.info(r)
+
+      # entity = DatastoreFile(data=file.value, mimetype=file.type)
+      # entity.put()
+      # file_url = "http://%s/%d/%s" % (self.request.host, entity.key().id(), file.name)
+      # self.response.out.write("Your uploaded file is now available at %s" % (file_url,))
+
+      # self.redirect('/')
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/sign', Guestbook),
+                               ('/upload', Upload),
                                ('/track', TrackPage)],
                               debug=True)
