@@ -23,7 +23,19 @@ def guestbook_key(guestbook_name=None):
 class Track(db.Model):
    artist   = db.StringProperty()
    title    = db.StringProperty()
+   revisions= db.ListProperty(db.Key)
 
+class Revision(db.Model):
+   content  = db.TextProperty()
+   date     = db.DateTimeProperty(auto_now_add=True)
+
+def searchTrack(search_query):
+   result_artist = Track.all().filter('artist =', search_query).fetch(5)
+   result_title  = Track.all().filter('title  =', search_query).fetch(5)
+   search_result = list(itertools.chain(result_artist,result_title))
+   if len(search_result)==0:
+      search_result = None
+   return search_result
 
 #=====================================================================================
 
@@ -35,15 +47,7 @@ class MainPage(webapp2.RequestHandler):
       greetings = greetings_query.fetch(10)
 
       search_query = self.request.get('search_query')
-      result_artist = Track.all().filter('artist =', search_query).fetch(5)
-      result_title  = Track.all().filter('title  =', search_query).fetch(5)
-      search_result = list(itertools.chain(result_artist,result_title))
-      if len(search_result)==0:
-         search_result = None
-
-      logging.info("search_query: %s" % search_query)
-      logging.info("result_artist: %s" % result_artist)
-      logging.info("result_title: %s" % result_title)
+      search_result = searchTrack(search_query)
 
       if users.get_current_user():
          url = users.create_logout_url(self.request.uri)
@@ -64,23 +68,94 @@ class MainPage(webapp2.RequestHandler):
       self.response.out.write(template.render(template_values))
 
 
+class TrackPage(webapp2.RequestHandler):
+   def get(self):
+
+      # TODO: foolproof str-to-key conversion from naked URL
+      track_key = db.Key(self.request.get('key'))
+      track = Track.all().filter('__key__ = ', track_key).get()
+
+      #rev_keys = [db.Key(k) for k in track.revisions]
+      list_revision = list(Revision.all().filter('__key__ IN', track.revisions).run(limit=10))
+
+      for rev in list_revision:
+         for line in rev.content:
+            logging.info(line)
+
+      template_values = {
+         'track': track,
+         'list_revision': list_revision
+      }
+
+      template = jinja_environment.get_template('track.html')
+      self.response.out.write(template.render(template_values))
+
+
+
 class Guestbook(webapp2.RequestHandler):
-  def post(self):
+   def post(self):
+
+      # TODO: Data validation
+      
+      val = self.request.get('revision')
+      
+      l = val.splitlines(True)
+
+      list_header = ('artist', 'title')
+
+      new_artist = None
+      new_title = None
+
+      iterable = iter(l)
+      for line in iterable:
+         if line.startswith('artist'):
+            new_artist = line.split()[1]
+         elif line.startswith('title'):
+            new_title = line.split()[1]
+         else:
+            break
+      
+      revision = Revision()
+      revision.content = "".join(list(iterable))
+      revision.put()
+
+      logging.info(revision.key())
+
+      ts = Track.all()
+      ts.filter('artist =', new_artist)
+      ts.filter('title = ', new_title)
+      
+      # If not existed, create a new Track for it
+      if not ts.get():
+         logging.info('Track not existed. Creating new track')
+         track = Track()
+         track.artist = new_artist
+         track.title = new_title
+      else:
+         logging.info('Track existed. Appending revision.')
+         track = ts.get()
+      track.revisions.append(revision.key())
+      track.put()
+
+
+      self.redirect('/')
+
     # We set the same parent key on the 'Greeting' to ensure each greeting is in
     # the same entity group. Queries across the single entity group will be
     # consistent. However, the write rate to a single entity group should
     # be limited to ~1/second.
-    guestbook_name = self.request.get('guestbook_name')
-    greeting = Greeting(parent=guestbook_key(guestbook_name))
+    # guestbook_name = self.request.get('guestbook_name')
+    # greeting = Greeting(parent=guestbook_key(guestbook_name))
 
-    if users.get_current_user():
-      greeting.author = users.get_current_user().nickname()
+    # if users.get_current_user():
+    #   greeting.author = users.get_current_user().nickname()
 
-    greeting.content = self.request.get('content')
-    greeting.put()
-    self.redirect('/?' + urllib.urlencode({'guestbook_name': guestbook_name}))
+    # greeting.content = self.request.get('content')
+    # greeting.put()
+      # self.redirect('/?' + urllib.urlencode({'guestbook_name': guestbook_name}))
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
-                               ('/sign', Guestbook)],
+                               ('/sign', Guestbook),
+                               ('/track', TrackPage)],
                               debug=True)

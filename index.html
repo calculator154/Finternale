@@ -3,38 +3,42 @@
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
   </head>
   <body>
-    {% for greeting in greetings %}
-      {% if greeting.author %}
-        <b>{{ greeting.author }}</b> wrote:
-      {% else %}
-        An anonymous person wrote:
-      {% endif %}
-      <blockquote>{{ greeting.content|escape }}</blockquote>
-    {% endfor %}
 
     {% if search_result %}
+      Search result::
       {% for track in search_result %}
-        <blockquote>{{ track.artist }} - {{ track.title}}</blockquote>
+        <br><a href="/track?key={{track.key()}}">{{ track.artist }} - {{ track.title}}</a>
       {% endfor %}
     {% else %}
       Search not found
     {% endif %}
 
+<!-- 
     <form action="/sign" method="post">
       <div><textarea name="content" rows="3" cols="60"></textarea></div>
       <div><input type="submit" value="Sign Guestbook"></div>
-    </form>
-
+    </form> -->
+<!-- 
     <hr>
     <form>Guestbook name: 
       <input value="{{ guestbook_name }}" name="guestbook_name">
       <input type="submit" value="switch">
-    </form>
-
+    </form> -->
+    <p>
     <form>Searchbox: 
       <input value="{{ search_query }}" name="search_query">
       <input type="submit" value="switch">
     </form>
+
+    <form>
+      <input type='file' multiple>
+    </form>
+
+    <form action="/sign" method="post">Addbox:
+      <div><textarea name="revision" rows=20 cols=60></textarea></div>
+      <div><input type="submit" value="Add revision"></div>
+    </form>
+
 
     <a href="{{ url }}">{{ url_linktext }}</a>
 
