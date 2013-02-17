@@ -1,5 +1,5 @@
 title: ความคิด
-Artist: สแตมป์
+artist: สแตมป์
 album: Million Ways To Write Part 1
 
 

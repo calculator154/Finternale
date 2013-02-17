@@ -123,91 +123,67 @@ class TrackPage(webapp2.RequestHandler):
 
 
 
-class Guestbook(webapp2.RequestHandler):
-   def post(self):
+# class Guestbook(webapp2.RequestHandler):
+#    def post(self):
 
-      # TODO: Data validation
+#       # TODO: Data validation
       
-      val = self.request.get('revision')
+#       val = self.request.get('revision')
       
-      l = val.splitlines(True)
+#       l = val.splitlines(True)
 
-      new_artist = None
-      new_title = None
+#       new_artist = None
+#       new_title = None
 
-      # Support Thai
-      iterable = iter(l)
-      for line in iterable:
-         if line.startswith('artist'):
-            new_artist = line.split()[1]
-         elif line.startswith('title'):
-            new_title = line.split()[1]
-         else:
-            break
+#       # Support Thai
+#       iterable = iter(l)
+#       for line in iterable:
+#          if line.startswith('artist'):
+#             new_artist = line.split()[1]
+#          elif line.startswith('title'):
+#             new_title = line.split()[1]
+#          else:
+#             break
       
-      revision = Revision()
-      revision.content = "".join(list(iterable))
-      revision.put()
+#       revision = Revision()
+#       revision.content = "".join(list(iterable))
+#       revision.put()
 
-      logging.info(revision.key())
+#       logging.info(revision.key())
 
-      ts = Track.all()
-      ts.filter('artist =', new_artist)
-      ts.filter('title = ', new_title)
+#       ts = Track.all()
+#       ts.filter('artist =', new_artist)
+#       ts.filter('title = ', new_title)
       
-      # If not existed, create a new Track for it
-      if not ts.get():
-         logging.info('Track not existed. Creating new track')
-         track = Track()
-         track.artist = new_artist
-         track.title = new_title
-      else:
-         logging.info('Track existed. Appending revision.')
-         track = ts.get()
-      track.revisions.append(revision.key())
-      track.put()
+#       # If not existed, create a new Track for it
+#       if not ts.get():
+#          logging.info('Track not existed. Creating new track')
+#          track = Track()
+#          track.artist = new_artist
+#          track.title = new_title
+#       else:
+#          logging.info('Track existed. Appending revision.')
+#          track = ts.get()
+#       track.revisions.append(revision.key())
+#       track.put()
 
-      self.redirect('/')
+#       self.redirect('/')
 
 class Upload(webapp2.RequestHandler):
    def post(self):
       file = unicode(self.request.get('file'),'utf-8')
-
-      # file = self.request.get('file')
-      # file = self.request.POST.get("file",None)
-      # logging.info(file.value)
-      # logging.info(file.value)
-      # logging.info(file)
-
       t,r = TRparser(file)
       r.put()
 
-      logging.info(isTrackExisted(t))
-
-
       if isTrackExisted(t):
-         track = fetchTrack(t)
-         track.addRevision(r)
-         track.put()
-      else:
-         t.addRevision(r)
-         t.put()
-
-      self.redirect('/')
-
-      # logging.info(t)
-      # logging.info(r)
-
-      # entity = DatastoreFile(data=file.value, mimetype=file.type)
-      # entity.put()
-      # file_url = "http://%s/%d/%s" % (self.request.host, entity.key().id(), file.name)
-      # self.response.out.write("Your uploaded file is now available at %s" % (file_url,))
-
-      # self.redirect('/')
+         t = fetchTrack(t)
+      t.addRevision(r)
+      t.put()
+      self.redirect('/track?key=%s' % t.key())
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
-                               ('/sign', Guestbook),
+                               # ('/sign', Guestbook),
                                ('/upload', Upload),
                                ('/track', TrackPage)],
                               debug=True)
